@@ -1,6 +1,6 @@
-import { requireNativeComponent } from 'react-native';
+import { ViewProps, requireNativeComponent } from 'react-native';
 
-interface RNCGalleryViewProps {}
+export interface RNCGalleryViewProps extends ViewProps {}
 
 export const RNCGalleryView =
   requireNativeComponent<RNCGalleryViewProps>('RNCGalleryView');
