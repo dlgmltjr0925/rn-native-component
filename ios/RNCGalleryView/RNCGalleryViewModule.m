@@ -12,4 +12,6 @@
 
 + (BOOL)requiresMainQueueSetup { return YES; }
 
+RCT_EXPORT_VIEW_PROPERTY(column, NSNumber);
+
 @end

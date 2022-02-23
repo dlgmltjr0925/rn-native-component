@@ -7,3 +7,7 @@ export interface GalleryViewProps extends RNCGalleryViewProps {}
 export function GalleryView(props: GalleryViewProps) {
   return <RNCGalleryView {...props} />;
 }
+
+GalleryView.defaultProps = {
+  column: 3,
+};

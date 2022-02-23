@@ -8,7 +8,8 @@
 import UIKit
 
 class RNCGalleryView: RCTView, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-  var _collectionView: UICollectionView? = nil
+  var collectionView: UICollectionView!
+  var column: NSNumber! = 3
   
   override init(frame: CGRect) {
     super.init(frame: frame)
@@ -16,29 +17,31 @@ class RNCGalleryView: RCTView, UICollectionViewDataSource, UICollectionViewDeleg
     super.backgroundColor = UIColor.clear
     
     let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout.init()
-    
-    _collectionView = UICollectionView.init(frame: self.bounds, collectionViewLayout: layout)
-    
-    if ((_collectionView) != nil) {
-      if #available(iOS 11, *) {
-        _collectionView!.contentInsetAdjustmentBehavior = UIScrollView.ContentInsetAdjustmentBehavior.never
-      }
-      _collectionView!.backgroundColor = UIColor.clear
-      _collectionView!.dataSource = self
-      _collectionView!.delegate = self
       
-      _collectionView!.register(RNCGalleryViewCameraCell.self, forCellWithReuseIdentifier: RNCGalleryViewCameraCell.reuseIdentifier)
-      
-      self.addSubview(_collectionView!)
-    }
+    initCollectionView(layout)
     
     load()
+  }
+  
+  func initCollectionView(_ layout: UICollectionViewLayout) {
+    self.collectionView = UICollectionView.init(frame: self.bounds, collectionViewLayout: layout)
+    
+    if #available(iOS 11, *) {
+      self.collectionView.contentInsetAdjustmentBehavior = UIScrollView.ContentInsetAdjustmentBehavior.never
+    }
+    self.collectionView.backgroundColor = UIColor.clear
+    self.collectionView.dataSource = self
+    self.collectionView.delegate = self
+    
+    self.collectionView.register(RNCGalleryViewCameraCell.self, forCellWithReuseIdentifier: RNCGalleryViewCameraCell.reuseIdentifier)
+    
+    self.addSubview(collectionView)
   }
   
   override func layoutSubviews() {
     super.layoutSubviews()
     
-    _collectionView?.frame = self.bounds
+    self.collectionView?.frame = self.bounds
   }
   
   func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -52,14 +55,23 @@ class RNCGalleryView: RCTView, UICollectionViewDataSource, UICollectionViewDeleg
   }
   
   func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-    return CGSize(width: 100, height: 100)
+    let column = self.column as! CGFloat
+    let gap = (column - 1) * 2
+    let size = self.bounds.size.width / column - gap
+    
+    return CGSize(width: size, height: size)
   }
   
   func load() {
-    _collectionView?.reloadData()
+    self.collectionView?.reloadData()
   }
   
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
+  }
+  
+  @objc
+  func setColumn(_ column: NSNumber) {
+    self.column = column
   }
 }

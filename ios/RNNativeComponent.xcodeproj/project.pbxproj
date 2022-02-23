@@ -121,9 +121,9 @@
 			isa = PBXGroup;
 			children = (
 				328D07B327D3D88E00AB11E8 /* RNCGalleryView.swift */,
+				328D07B927D3E0B100AB11E8 /* RNCGalleryViewCameraCell.swift */,
 				328D07B527D3D8C700AB11E8 /* RNCGalleryViewManager.swift */,
 				328D07B727D3DA2B00AB11E8 /* RNCGalleryViewModule.m */,
-				328D07B927D3E0B100AB11E8 /* RNCGalleryViewCameraCell.swift */,
 			);
 			path = RNCGalleryView;
 			sourceTree = "<group>";
