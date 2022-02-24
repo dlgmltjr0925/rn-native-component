@@ -6,10 +6,14 @@
 //
 
 import UIKit
+import Photos
 
 class RNCGalleryView: RCTView, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+
   var collectionView: UICollectionView!
   var column: NSNumber! = 3
+  var mediaType: NSString?
+  var assets: [PHAsset]?
   
   override init(frame: CGRect) {
     super.init(frame: frame)
@@ -22,6 +26,13 @@ class RNCGalleryView: RCTView, UICollectionViewDataSource, UICollectionViewDeleg
     
     load()
   }
+  
+  override func layoutSubviews() {
+    super.layoutSubviews()
+    
+    self.collectionView?.frame = self.bounds
+  }
+
   
   func initCollectionView(_ layout: UICollectionViewLayout) {
     self.collectionView = UICollectionView.init(frame: self.bounds, collectionViewLayout: layout)
@@ -38,12 +49,7 @@ class RNCGalleryView: RCTView, UICollectionViewDataSource, UICollectionViewDeleg
     self.addSubview(collectionView)
   }
   
-  override func layoutSubviews() {
-    super.layoutSubviews()
     
-    self.collectionView?.frame = self.bounds
-  }
-  
   func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
     return 1
   }
@@ -63,7 +69,47 @@ class RNCGalleryView: RCTView, UICollectionViewDataSource, UICollectionViewDeleg
   }
   
   func load() {
-    self.collectionView?.reloadData()
+    DispatchQueue.main.async {
+      self.requestPhotoLibraryAccess({
+        DispatchQueue.main.async {
+          self.assets = self.fetchAssets()
+          self.collectionView?.reloadData()
+        }
+      })
+    }
+  }
+  
+  func reload() {
+    self.load()
+  }
+  
+  func fetchAssets() -> [PHAsset] {
+    let fetchOptions = PHFetchOptions()
+    let sortDescriptor = NSSortDescriptor.init(key: "creationDate", ascending: false)
+    let predicate = NSPredicate.init(format: "mediaType == %d", PHAssetMediaType.image.rawValue)
+    
+    fetchOptions.predicate = predicate
+    fetchOptions.sortDescriptors = [sortDescriptor]
+    let fetchResult = PHAsset.fetchAssets(with: fetchOptions)
+    
+    var assets: [PHAsset] = []
+    fetchResult.enumerateObjects { object, Index, stop in
+      assets.append(object)
+    }
+    
+    return assets
+  }
+  
+  func requestPhotoLibraryAccess(_ authorizedHandler: @escaping () -> Void) {
+    let authStatus = PHPhotoLibrary.authorizationStatus()
+    
+    if (authStatus == PHAuthorizationStatus.authorized) {
+      authorizedHandler()
+    } else if (authStatus == PHAuthorizationStatus.notDetermined) {
+      PHPhotoLibrary.requestAuthorization { _ in
+        self.requestPhotoLibraryAccess(authorizedHandler)
+      }
+    }
   }
   
   required init?(coder: NSCoder) {
@@ -73,5 +119,11 @@ class RNCGalleryView: RCTView, UICollectionViewDataSource, UICollectionViewDeleg
   @objc
   func setColumn(_ column: NSNumber) {
     self.column = column
+  }
+  
+  @objc
+  func setMediaType(_ mediaType: NSString) {
+    self.mediaType = mediaType
+    self.reload()
   }
 }

@@ -15,6 +15,7 @@
 		328D07B627D3D8C700AB11E8 /* RNCGalleryViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 328D07B527D3D8C700AB11E8 /* RNCGalleryViewManager.swift */; };
 		328D07B827D3DA2B00AB11E8 /* RNCGalleryViewModule.m in Sources */ = {isa = PBXBuildFile; fileRef = 328D07B727D3DA2B00AB11E8 /* RNCGalleryViewModule.m */; };
 		328D07BA27D3E0B100AB11E8 /* RNCGalleryViewCameraCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 328D07B927D3E0B100AB11E8 /* RNCGalleryViewCameraCell.swift */; };
+		328D07BD27D4D24600AB11E8 /* RNCGalleryViewMediaCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 328D07BC27D4D24600AB11E8 /* RNCGalleryViewMediaCell.swift */; };
 		6172F2D35A4C3AA820D92908 /* libPods-RNNativeComponent.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6423831EA8574132BED9D8CC /* libPods-RNNativeComponent.a */; };
 		7EF68E3733C33B6898317E18 /* libPods-RNNativeComponent-RNNativeComponentTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ABFE59519B596E51CEFDCCC0 /* libPods-RNNativeComponent-RNNativeComponentTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
@@ -46,6 +47,7 @@
 		328D07B527D3D8C700AB11E8 /* RNCGalleryViewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RNCGalleryViewManager.swift; sourceTree = "<group>"; };
 		328D07B727D3DA2B00AB11E8 /* RNCGalleryViewModule.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNCGalleryViewModule.m; sourceTree = "<group>"; };
 		328D07B927D3E0B100AB11E8 /* RNCGalleryViewCameraCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RNCGalleryViewCameraCell.swift; sourceTree = "<group>"; };
+		328D07BC27D4D24600AB11E8 /* RNCGalleryViewMediaCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RNCGalleryViewMediaCell.swift; sourceTree = "<group>"; };
 		6423831EA8574132BED9D8CC /* libPods-RNNativeComponent.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RNNativeComponent.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6C97AB639B58BBB4B15BBE30 /* Pods-RNNativeComponent-RNNativeComponentTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RNNativeComponent-RNNativeComponentTests.debug.xcconfig"; path = "Target Support Files/Pods-RNNativeComponent-RNNativeComponentTests/Pods-RNNativeComponent-RNNativeComponentTests.debug.xcconfig"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = RNNativeComponent/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -124,6 +126,7 @@
 				328D07B927D3E0B100AB11E8 /* RNCGalleryViewCameraCell.swift */,
 				328D07B527D3D8C700AB11E8 /* RNCGalleryViewManager.swift */,
 				328D07B727D3DA2B00AB11E8 /* RNCGalleryViewModule.m */,
+				328D07BC27D4D24600AB11E8 /* RNCGalleryViewMediaCell.swift */,
 			);
 			path = RNCGalleryView;
 			sourceTree = "<group>";
@@ -435,6 +438,7 @@
 				328D07BA27D3E0B100AB11E8 /* RNCGalleryViewCameraCell.swift in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
 				328D07B427D3D88E00AB11E8 /* RNCGalleryView.swift in Sources */,
+				328D07BD27D4D24600AB11E8 /* RNCGalleryViewMediaCell.swift in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 				328D07B827D3DA2B00AB11E8 /* RNCGalleryViewModule.m in Sources */,
 				328D07B627D3D8C700AB11E8 /* RNCGalleryViewManager.swift in Sources */,
