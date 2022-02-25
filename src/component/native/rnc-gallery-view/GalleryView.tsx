@@ -9,5 +9,5 @@ export function GalleryView(props: GalleryViewProps) {
 }
 
 GalleryView.defaultProps = {
-  column: 3,
+  column: 4,
 };

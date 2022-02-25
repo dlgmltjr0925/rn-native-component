@@ -9,11 +9,12 @@ import UIKit
 import Photos
 
 class RNCGalleryView: RCTView, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-
+  static let GAP: CGFloat = 2
+  
   var collectionView: UICollectionView!
   var column: NSNumber! = 3
   var mediaType: NSString?
-  var assets: [PHAsset]?
+  var assets: [PHAsset] = []
   
   override init(frame: CGRect) {
     super.init(frame: frame)
@@ -45,31 +46,83 @@ class RNCGalleryView: RCTView, UICollectionViewDataSource, UICollectionViewDeleg
     self.collectionView.delegate = self
     
     self.collectionView.register(RNCGalleryViewCameraCell.self, forCellWithReuseIdentifier: RNCGalleryViewCameraCell.reuseIdentifier)
+    self.collectionView.register(RNCGalleryViewMediaCell.self, forCellWithReuseIdentifier: RNCGalleryViewMediaCell.reuseIdentifier)
     
     self.addSubview(collectionView)
   }
   
-    
-  func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+  func numberOfSections(in collectionView: UICollectionView) -> Int {
     return 1
   }
   
+  func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+    return self.getCellSize()
+  }
+  
+  func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+    return UIEdgeInsets.zero
+  }
+  
+  func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+    return RNCGalleryView.GAP
+  }
+  
+  func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+    return RNCGalleryView.GAP
+  }
+    
+  func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    return self.assets.count + 1
+  }
+  
   func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-    let cell: RNCGalleryViewCameraCell = collectionView.dequeueReusableCell(withReuseIdentifier: RNCGalleryViewCameraCell.reuseIdentifier, for: indexPath) as! RNCGalleryViewCameraCell
+    if (indexPath.row == 0) {
+      return collectionView.dequeueReusableCell(withReuseIdentifier: RNCGalleryViewCameraCell.reuseIdentifier, for: indexPath) as! RNCGalleryViewCameraCell
+    }
+    
+    let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RNCGalleryViewMediaCell.reuseIdentifier, for: indexPath) as! RNCGalleryViewMediaCell
+    
+    let asset = self.assets[indexPath.row - 1]
+    
+    if (asset.mediaType == PHAssetMediaType.video) {
+      let duration = asset.duration
+      let min = duration / 60
+      let sec = duration.truncatingRemainder(dividingBy: 60)
+      let timeString = "\(min):\(sec)"
+      cell.timeLabel.text = timeString
+      cell.timeLabel.isHidden = false
+    } else {
+      cell.timeLabel.isHidden = true
+    }
+    
+    let imageRequestOptions = PHImageRequestOptions.init()
+    imageRequestOptions.isNetworkAccessAllowed = true
+    imageRequestOptions.isSynchronous = true
+    imageRequestOptions.resizeMode = PHImageRequestOptionsResizeMode.none
+    imageRequestOptions.deliveryMode = PHImageRequestOptionsDeliveryMode.highQualityFormat
+    
+    cell.representedAssetIdentifier = asset.localIdentifier
+    cell.photoImageView.image = nil
+    
+    PHImageManager.default().requestImage(for: asset, targetSize: self.getCellSize(), contentMode: PHImageContentMode.aspectFill, options: imageRequestOptions) { image, info in
+      if (cell.representedAssetIdentifier == asset.localIdentifier) {
+        cell.photoImageView.image = image
+      }
+    }
     
     return cell
   }
   
-  func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+  func getCellSize() -> CGSize {
     let column = self.column as! CGFloat
-    let gap = (column - 1) * 2
-    let size = self.bounds.size.width / column - gap
-    
-    return CGSize(width: size, height: size)
+    let widthExcludingSpacing = self.bounds.size.width - (column - 1) * RNCGalleryView.GAP
+    let width = widthExcludingSpacing / column
+    return CGSize.init(width: width, height: width)
   }
   
+    
   func load() {
-    DispatchQueue.main.async {
+    DispatchQueue.global().async {
       self.requestPhotoLibraryAccess({
         DispatchQueue.main.async {
           self.assets = self.fetchAssets()

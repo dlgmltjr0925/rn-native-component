@@ -22,6 +22,7 @@ class RNCGalleryViewMediaCell : UICollectionViewCell {
   var overlayView: UIView!
   var indicatorView: UIView!
   var timeLabel: UILabel!
+  var representedAssetIdentifier: String!
   
   override init(frame: CGRect) {
     super.init(frame: frame)
