@@ -10,4 +10,5 @@ export function GalleryView(props: GalleryViewProps) {
 
 GalleryView.defaultProps = {
   column: 4,
+  mediaType: 'ALL',
 };

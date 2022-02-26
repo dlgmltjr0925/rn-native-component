@@ -13,5 +13,6 @@
 + (BOOL)requiresMainQueueSetup { return YES; }
 
 RCT_EXPORT_VIEW_PROPERTY(column, NSNumber);
+RCT_EXPORT_VIEW_PROPERTY(mediaType, NSString) // ALL, PHOTO, VIDEO
 
 @end

@@ -139,9 +139,12 @@ class RNCGalleryView: RCTView, UICollectionViewDataSource, UICollectionViewDeleg
   func fetchAssets() -> [PHAsset] {
     let fetchOptions = PHFetchOptions()
     let sortDescriptor = NSSortDescriptor.init(key: "creationDate", ascending: false)
-    let predicate = NSPredicate.init(format: "mediaType == %d", PHAssetMediaType.image.rawValue)
+    if (self.mediaType == "PHOTO") {
+      fetchOptions.predicate = NSPredicate.init(format: "mediaType == %d", PHAssetMediaType.image.rawValue)
+    } else if (self.mediaType == "VIDEO") {
+      fetchOptions.predicate = NSPredicate.init(format: "mediaType == %d", PHAssetMediaType.video.rawValue)
+    }
     
-    fetchOptions.predicate = predicate
     fetchOptions.sortDescriptors = [sortDescriptor]
     let fetchResult = PHAsset.fetchAssets(with: fetchOptions)
     
