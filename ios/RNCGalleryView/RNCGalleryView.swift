@@ -16,6 +16,8 @@ class RNCGalleryView: RCTView, UICollectionViewDataSource, UICollectionViewDeleg
   var mediaType: NSString?
   var assets: [PHAsset] = []
   
+  @objc var onSelectMedia: RCTDirectEventBlock?
+  
   override init(frame: CGRect) {
     super.init(frame: frame)
     
@@ -69,6 +71,42 @@ class RNCGalleryView: RCTView, UICollectionViewDataSource, UICollectionViewDeleg
   
   func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
     return RNCGalleryView.GAP
+  }
+  
+  func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    if (indexPath.row == 0) {
+      
+    } else if let onSelectMedia = self.onSelectMedia {
+      let asset = self.assets[indexPath.row - 1]
+      let assetResources = PHAssetResource.assetResources(for: asset)
+      let resource = assetResources[0]
+      let originalFilename = resource.originalFilename
+      let fileSize = resource.value(forKey: "fileSize")
+      var mediaType: String
+      switch asset.mediaType {
+      case PHAssetMediaType.video:
+        mediaType = "video"
+      case PHAssetMediaType.image:
+        mediaType = "image"
+      case PHAssetMediaType.audio:
+        mediaType = "audio"
+      default:
+        mediaType = "unknown"
+      }
+      var media: [String: Any] = [:]
+      
+      media["mediaType"] = mediaType
+      media["mimeType"] = nil
+      media["uri"] = "ph://\(asset.localIdentifier)"
+      media["fileName"] = originalFilename
+      media["fileSize"] = fileSize
+      media["width"] = asset.pixelWidth
+      media["height"] = asset.pixelHeight
+      media["playableDuration"] = (asset.mediaType == PHAssetMediaType.video || asset.mediaType == PHAssetMediaType.audio) ? asset.duration : nil
+      media["timestamp"] = asset.creationDate?.timeIntervalSince1970
+      
+      onSelectMedia(["media": media])
+    }
   }
     
   func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
